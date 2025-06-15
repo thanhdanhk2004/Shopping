@@ -1,0 +1,28 @@
+﻿@model VnPayModel
+@{
+    ViewData["title"] = "Momo info page";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Order Id</th>
+            <th scope="col">Order Description</th>
+            <th scope="col">TransactionId</th>
+            <th scope="col">PaymentMethod</th>
+            <th scope="col">PaymentId</th>
+            <th scope="col">DateCreated</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Id</td>
+            <td>@Model.OrderId</td>
+            <td>@Model.OrderDescription</td>
+            <td>@Model.TransactionId</td>
+            <td>@Model.PaymentMethod</td>
+            <td>@Model.PaymentId</td>
+            <td>@Model.DateCreated</td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,11 @@
+﻿@using Shopping.Models.Momo
+@model MomoExecuteResponseModel
+@{
+    ViewData["title"] = "Payment Call Back Page";
+}
+
+<h5>Payment success</h5>
+<h6>OrderID: @Model.OrderId</h6>
+<h6>OrderInfo: @Model.OrderInfo</h6>
+<h6>Grand Toltal: @Model.Amount</h6>
+<h5>Show <a asp-action="History" asp-controller="Account">History Ordered</a></h5>

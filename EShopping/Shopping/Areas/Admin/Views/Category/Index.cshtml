@@ -1,0 +1,50 @@
+﻿@model IEnumerable<CategoryModel>
+@{
+    ViewData["title"] = "Categoryies Listed";
+    Paginate paginate = new Paginate();
+    int page_no = 0;
+    if(ViewBag.Pager != null)
+    {
+        paginate = ViewBag.Pager;
+        page_no = paginate.CurrentPage;
+    }
+}
+<h3>List Category</h3>
+<a class="btn btn-warning btn-sm" asp-action="Create" asp-controller="Category">Add Category</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Category Description</th>
+            <th scope="col">Category Slug</th>
+            <th scope="col">Category Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@item.Id</th>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>
+                    @if(@item.Status == 1){
+                        <span class="text text-success">Show</span>
+                    }
+                    else
+                    {
+                        <span class="text text-danger">Hide</span>
+                    }
+                </td>
+                <td>@item.Status</td>
+                <td>
+                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-controller="Category" asp-route-id="@item.Id">Sửa</a>
+                    <a class="btn btn-danger btn-sm confirmDeletion" asp-action="Delete" asp-controller="Category" asp-route-id="@item.Id">Xóa</a>
+                </td>
+            </tr>
+        }
+        
+    </tbody>
+</table>
+<partial name="_PagingPartial" model="@paginate"/>

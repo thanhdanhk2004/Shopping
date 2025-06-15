@@ -1,0 +1,27 @@
+﻿@model MomoInforModel
+@{
+    ViewData["title"] = "Momo info page";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Order Id</th>
+            <th scope="col">Order Info</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Date Paid</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Id</td>
+            <td>@Model.OrderId</td>
+            <td>@Model.OrderInfo</td>
+            <td>@Model.FullName</td>
+            <td>@Model.Amount</td>
+            <td>@Model.DatePaid</td>
+        </tr>
+    </tbody>
+</table>

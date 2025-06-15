@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CompareViewModel>
+@{
+    ViewData["title"] = "Compare Listed";
+}
+<h3>List Product Compare</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Product Description</th>
+            <th scope="col">Product Price</th>
+            <th scope="col">Product Image</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@item.Id</th>
+                <td>@item.ProductName</td>
+                <td>@item.ProductDescription</td>
+                <td>@item.ProductPrice</td>
+                <td><img src="~/media/products/@item.Image" style="width: 120px"/></td>
+                <td>
+                    <a class="btn btn-danger btn-sm confirmDeletion" asp-action="Delete" asp-controller="Compare" asp-route-id="@item.Id">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

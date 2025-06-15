@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "User page";
+}
+<h3>List Order</h3>
+<a class="btn btn-primary" asp-action="create" asp-controller="User">Add user</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone number</th>
+            <th scope="col">Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@item.User.Id</th>
+                <td>@item.User.UserName</td>
+                <td>@item.User.Email</td>
+                @if(item.User.PhoneNumber is null)
+                {
+                    <td>Null</td>
+                }
+                else
+                {
+                    <td>@item.User.PhoneNumber</td>
+                }
+
+                <td>@item.RoleName</td>
+                <td>
+                    @if (item.User.Id != ViewBag.LoggedInUserId)
+                    {
+                        @if(item.RoleName != "Admin")
+                        {
+                            <a class="btn btn-warning btn-sm" asp-action="Edit" asp-controller="User" asp-route-Id="@item.User.Id">Edit</a>
+                            <a class="btn btn-danger btn-sm confirmDeletion" asp-action="Delete" asp-controller="User" asp-route-Id="@item.User.Id">Delete</a>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

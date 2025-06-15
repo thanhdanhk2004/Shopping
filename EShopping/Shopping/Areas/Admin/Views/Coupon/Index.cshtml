@@ -1,0 +1,204 @@
+﻿@model CouponModel
+@{
+    ViewData["title"] = "Create Coupon";
+}
+<style type="text/css">
+    .css_select_div {
+    text-align: center;
+    }
+
+    .css_select {
+    display: inline-table;
+    width: 25%;
+    padding: 5px;
+    margin: 5px 2%;
+    border: solid 1px #686868;
+    border-radius: 5px;
+    }
+</style>
+<h4>Create Brand</h4>
+<div class="col-md-9">
+
+    <form asp-action="Create" asp-controller="Coupon" autocomplete="off" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label>Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="Description" asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger" />
+        </div>
+
+        <div class="form-group">
+            <label>Date Start</label>
+            <input type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="DateStart" class="form-control" />
+            <span asp-validation-for="DateStart" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label>Date Expire</label>
+            <input type="date" asp-for="DateExpired" class="form-control" />
+            <span asp-validation-for="DateExpired" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label>Status</label>
+            <select asp-for="Status" class="form-control">
+                <option value="1">Show</option>
+                <option value="0">Hide</option>
+            </select>
+            <span asp-validation-for="Status" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary">Create</button>
+        </div>
+    </form>
+    <!--Table shipping-->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Date Start</th>
+                <th>Date Expire</th>
+                <th>Quantity</th>
+                <th>Active</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var coupon in ViewBag.Coupons)
+            {
+                <tr>
+                    <td>@coupon.Id</td>
+                    <td>@coupon.Name</td>
+                    <td>@coupon.Description</td>
+                    <td>@coupon.DateStart</td>
+                    <td>@coupon.DateExpired</td>
+                    <td>@coupon.Quantity</td>
+                    @if(coupon.Status == 1)
+                    {
+                        <td>
+                            <select name="Status">
+                                <option value="1">Show</option>
+                                <option value="0">Hide</option>
+                            </select>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <select name="Status">
+                                <option value="1">Show</option>
+                                <option value="0">Hide</option>
+                            </select>
+                        </td>
+                    }
+                    <td>
+                        @if(coupon.DateExpired < DateTime.Now)
+                        {
+                            <span class="text text-danger">Expired</span>
+                        }
+                        else
+                        {
+                            TimeSpan time = coupon.DateExpired - coupon.DateStart;
+                            int day = time.Days;
+                            @if(day == 0)
+                            {
+                                <span class="text text-danger">Today</span>
+                            }
+                            else
+                            {
+                                <span class="text text-success">@day day left</span>
+                            }
+                        }
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(function(){
+            var message = '@TempData["success"]';
+            if(message != '')
+                swal.fire(message);
+        });
+    </script>
+
+    <!--Add shipping-->
+    <script>
+        $('.btn-add-shipping').click(function(){
+            var city = $('#tinh').find('option:selected').text()
+            var district = $('#quan').find('option:selected').text()
+            var ward = $('#phuong').find('option:selected').text()
+            var price = $('#price-shipping').val()
+
+            if(city == '' || district == '' || ward == '' || price == ''){
+                swal.fire("Please input");
+            }else{
+                $.ajax({
+                    type:"POST",
+                    url: "@Url.Action("AddShipping", "Shiping")",
+                    data: {city: city, district: district, ward :ward, price: price},
+
+                    success: function(result){
+                        if(result.success)
+                            swal.fire("Add shipping success");
+                        else{
+                            swal.fire("Add shipping fail");
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            //Lấy tỉnh thành
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm',function(data_tinh){
+                if(data_tinh.error==0){
+                   $.each(data_tinh.data, function (key_tinh,val_tinh) {
+                      $("#tinh").append('<option value="'+val_tinh.id+'">'+val_tinh.full_name+'</option>');
+                   });
+                   $("#tinh").change(function(e){
+                        var idtinh=$(this).val();
+                        //Lấy quận huyện
+                        $.getJSON('https://esgoo.net/api-tinhthanh/2/'+idtinh+'.htm',function(data_quan){
+                            if(data_quan.error==0){
+                               $("#quan").html('<option value="0">Quận Huyện</option>');
+                               $("#phuong").html('<option value="0">Phường Xã</option>');
+                               $.each(data_quan.data, function (key_quan,val_quan) {
+                                  $("#quan").append('<option value="'+val_quan.id+'">'+val_quan.full_name+'</option>');
+                               });
+                               //Lấy phường xã
+                               $("#quan").change(function(e){
+                                    var idquan=$(this).val();
+                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/'+idquan+'.htm',function(data_phuong){
+                                        if(data_phuong.error==0){
+                                           $("#phuong").html('<option value="0">Phường Xã</option>');
+                                           $.each(data_phuong.data, function (key_phuong,val_phuong) {
+                                              $("#phuong").append('<option value="'+val_phuong.id+'">'+val_phuong.full_name+'</option>');
+                                           });
+                                        }
+                                    });
+                               });
+
+                            }
+                        });
+                   });
+
+                }
+            });
+         });
+    </script>
+
+}

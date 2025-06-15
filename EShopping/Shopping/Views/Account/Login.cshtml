@@ -1,0 +1,45 @@
+﻿@using Shopping.Models.ViewModels
+@model LoginViewModel
+@{
+    ViewData["title"] = "Login page";
+}
+<section>
+	<!--form-->
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 col-sm-offset-1">
+				<div class="login-form">
+					<!--login form-->
+					<h2>Login to your account</h2>
+					<div asp-validation-summary="ModelOnly" class="text-danger"/>
+					<form asp-action="Login" asp-controller="Account">
+						<div>
+							<label>Username</label>
+							<input asp-for="Username" class="form-group"/>
+							<span asp-validation-for="Username" class="text-danger"/>
+						</div>
+						
+						<div>
+							<label>Password</label>
+							<input asp-for="Password" class="form-group" />
+							<span asp-validation-for="Password" class="text-danger" />
+						</div>
+						<button type="submit" class="btn btn-default">Login</button>
+						<a asp-action="LoginByGoogle" asp-controller="Account">Login Google</a>
+						<br />
+						<a asp-action="create" asp-controller="Account">Register</a>
+						<br />
+						<a asp-action="ForgotPass" asp-controller="Account">Forget Pass</a>
+
+					</form>
+				</div><!--/login form-->
+			</div>
+			
+		</div>
+	</div>
+</section><!--/form-->
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

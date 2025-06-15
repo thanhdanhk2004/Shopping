@@ -1,0 +1,78 @@
+﻿@model ProductQuantityModel
+@{
+    ViewData["title"] = "Quantity Product";
+    var total_quantities = 0;
+    var key = 1;
+}
+<h4>Create Quantity</h4>
+<div class="col-md-9">
+    <form asp-action="AddQuantity" asp-controller="Product" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" name="id" value="@ViewBag.Id"/>
+        <div class="form-group">
+            <label>Quantity</label>
+            <input min="1" value="1" asp-for="Quantity" class="form-control" />
+            <span asp-validation-for="Quantity" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary">Update</button>
+        </div>
+    </form>
+    <a asp-action="Index" asp-controller="Product">Back to list Product</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Quantity added</th>
+
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var productQuantity in ViewBag.ProductByQuantity)
+        {
+            total_quantities += productQuantity.Quantity;
+            <tr>
+                <td>@key</td>
+                <td>@productQuantity.Quantity</td>
+
+                <td>@productQuantity.DateCreate</td>
+            </tr>
+            key++;
+        }
+        <tr>
+            <td>Total Quantities : @total_quantities</td>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+    <script>
+        $("#ImageUpload").change(function(){
+            readURL(this);
+        })
+    </script>
+
+    <script>
+        CKEDITOR.replace( 'Description' );
+    </script>
+
+    <script>
+        $('.typing-price').on("keyup", function(){
+
+            var currency_input = $(this).val();
+            $('#price-convert').html(
+                new Intl.NumberFormat('vn-VN', {style : 'currency', currency: 'VND'}).format(
+                    currency_input
+                )
+            )
+        })
+    </script>
+}

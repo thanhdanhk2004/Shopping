@@ -1,0 +1,32 @@
+﻿@{
+    var current_url = Url.ActionContext.HttpContext.Request.Path;
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <h5>Arrange</h5>
+            <select class="form-group" id="sort_by">
+                <option >Mới nhất</option>
+                <option value="@current_url?sort_by=price_increases">Price increases gradually</option>
+                <option value="@current_url?sort_by=price_decreases">Price decreasing</option>
+                <option value="@current_url?sort_by=price_newest">Latest</option>
+                <option value ="@current_url?sort_by=price_oldest">Oldest</option>
+            </select>
+        </div>
+
+        <div class="col-md-5">
+            <h5>Filter price</h5>
+            <form asp-action="index" asp-controller="Category">
+                <p>
+                    
+                    <input type="text" id="amount" readonly="" style="border:0; color:#f6931f; font-weight:bold;">
+                </p>
+                <div id="slider-range"></div>
+                <button type="submit" name="filterprice" data-current_url="@current_url" class="btn btn-danger btn-filter-price">Filter</button>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
