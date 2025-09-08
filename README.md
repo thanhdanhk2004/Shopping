@@ -20,7 +20,7 @@ Dự án **Website bán hàng** được xây dựng bằng **ASP.NET MVC** vớ
 1. Clone dự án: git clone https://github.com/thanhdanhk2004/Shopping.git
 2. Mở solution bằng Visual Studio
 3. Cấu hình lại chuỗi kết nối đến database của bạn trong file appsettings.json
-  "ConnectionStrings": {
+- "ConnectionStrings": {
     "ConnectedDb": "Data Source=your_server;Initial Catalog=EShopping;Integrated Security=True;Trust Server Certificate=True"
   },
 4. Cài đặt các gói cần thiết
